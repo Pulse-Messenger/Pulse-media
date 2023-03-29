@@ -16,6 +16,8 @@ npm i
 JWT_SECRET=Your JWT secret - must be the same as the API one
 DATABASE_ACCESS=Your mongo connection string
 
+APP_PORT=Your port
+
 S3_ENDPOINT=Your S3 endpoint
 S3_ACCESS_KEY=Your S3 access key
 S3_SECRET=Your S3 secret

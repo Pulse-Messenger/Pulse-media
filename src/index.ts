@@ -23,7 +23,7 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-app.use(routerInstance);
+app.use("/media", routerInstance);
 
 import "./media/media.controller";
 
