@@ -12,44 +12,6 @@ export const router = routerInstance;
 
 const upload = multer();
 
-router.get("/profilePics/:userID", async (req: Request, res: Response) => {
-  try {
-    if (!req.params.userID) throw { code: 400, message: "User ID is required" };
-
-    const file = await s3Service.getFile(
-      `profilePics/${req.params.userID}/profilePic.webp`
-    );
-    if (!file) throw { code: 404, message: "Object not found" };
-    else res.set(file.headers).status(200).send(file.buffer);
-  } catch (err: any) {
-    if (err.code && err.message)
-      res.status(err.code).send({ errors: [err.message] });
-    else res.status(500).send("An error occurred while uploading");
-  }
-});
-
-router.get(
-  "/uploads/:userID/:fileName",
-  async (req: Request, res: Response) => {
-    try {
-      if (!req.params.userID)
-        throw { code: 400, message: "User ID is required" };
-      if (!req.params.fileName)
-        throw { code: 400, message: "File name is required" };
-
-      const file = await s3Service.getFile(
-        `uploads/${req.params.userID}/${req.params.fileName}`
-      );
-      if (!file) throw { code: 404, message: "Object not found" };
-      else res.set(file.headers).status(200).send(file.buffer);
-    } catch (err: any) {
-      if (err.code && err.message)
-        res.status(err.code).send({ errors: [err.message] });
-      else res.status(500).send("An error occurred while fetching");
-    }
-  }
-);
-
 router.post(
   "/profilePics",
   authenticatedOnly,
@@ -79,7 +41,7 @@ router.post(
       );
 
       const pfpUrl = new URL(
-        `${req.protocol}://${req.get("host")}${req.originalUrl}/${userID}`
+        `https://s3.eu-central-2.wasabisys.com/cdn.pulse-messenger.com/profilePics/${userID}/profilePic.webp`
       );
 
       user.profilePic = pfpUrl.toString();
@@ -119,9 +81,7 @@ router.post(
 
         fileURLs.push(
           new URL(
-            `${req.protocol}://${req.get("host")}${
-              req.originalUrl
-            }/${userID}/${fileName}`
+            `https://s3.eu-central-2.wasabisys.com/cdn.pulse-messenger.com/uploads/${userID}/${fileName}`
           ).toString()
         );
       }

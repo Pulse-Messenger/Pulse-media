@@ -49,40 +49,6 @@ export class S3Service {
       return;
     }
   }
-
-  async getFile(name: string) {
-    const expTime = 30;
-
-    try {
-      const [stat, metaData] = await Promise.all([
-        this.s3.statObject(process.env.S3_BUCKET!, name),
-        this.s3.getObject(process.env.S3_BUCKET!, name),
-      ]);
-
-      // Collect the buffer data from the stream
-      const chunks = [];
-      for await (const chunk of metaData) {
-        chunks.push(chunk);
-      }
-      const buffer = Buffer.concat(chunks);
-
-      const fileName = name.split("/");
-
-      return {
-        headers: {
-          "Content-Type": stat.metaData["content-type"],
-          "Content-Disposition": `attachment; filename="${
-            fileName[fileName.length - 1]
-          }"`,
-          "Content-Length": buffer.length,
-          "Cache-Control": `max-age=${expTime}`,
-        },
-        buffer,
-      };
-    } catch {
-      return false;
-    }
-  }
 }
 
 export const s3Service = new S3Service();
