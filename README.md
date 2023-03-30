@@ -47,5 +47,6 @@ docker build -t media .
 # run with
 docker run 
   -p 6060:6060
-  --env-file .env media
+  --env-file .env
+  media
 ```
