@@ -35,8 +35,8 @@ export class S3Service {
 
       const metadata = {
         "Content-Type": contentType,
-        "x-amz-acl": "public-read", // set the ACL to public-read
-        "Cache-Control": `max-age=${15}`,
+        "x-amz-acl": "public-read",
+        "Cache-Control": `max-age=${0}`,
       };
 
       const { etag } = await this.s3.putObject(
