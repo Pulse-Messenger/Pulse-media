@@ -22,6 +22,8 @@ S3_ENDPOINT=Your S3 endpoint
 S3_ACCESS_KEY=Your S3 access key
 S3_SECRET=Your S3 secret
 S3_BUCKET=Your S3 bucket name
+
+CLIENT_PATH=Your client url
 ```
 
 - run the service with
