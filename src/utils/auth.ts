@@ -39,3 +39,22 @@ export const checkSession = async (req: Request) => {
     return false;
   }
 };
+
+export const getSessionID = async (req: Request) => {
+  try {
+    const token = getToken(req);
+    if (!token) return false;
+
+    const valid = jwt.verify(token, process.env.JWT_SECRET as string);
+    if (!valid) return false;
+
+    const user = await User.findOne({
+      "sessions.token": token,
+    });
+    if (!user) return false;
+
+    return user.id;
+  } catch {
+    return false;
+  }
+};

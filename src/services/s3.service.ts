@@ -29,21 +29,26 @@ export class S3Service {
     return await this.checkBucket(process.env.S3_BUCKET ?? "");
   }
 
-  public async uploadBuffer(key: string, buffer: Buffer, contentType: string) {
+  public async uploadBuffer(
+    key: string,
+    buffer: Buffer,
+    contentType: string,
+    metadata?: { [key: string]: string }
+  ) {
     try {
       key = key.replace(/~/g, "");
 
-      const metadata = {
+      const meta = {
         "Content-Type": contentType,
         "x-amz-acl": "public-read",
-        "Cache-Control": `max-age=${0}`,
+        "Cache-Control": `max-age=${30 * 60}`, // 30 min
       };
 
       const { etag } = await this.s3.putObject(
         process.env.S3_BUCKET ?? "",
         key,
         buffer,
-        metadata
+        { ...meta, ...metadata }
       );
     } catch {
       return;

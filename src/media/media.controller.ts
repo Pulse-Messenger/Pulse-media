@@ -3,7 +3,7 @@ import multer from "multer";
 
 import { routerInstance } from "../utils/app.router";
 import { s3Service } from "../services/s3.service";
-import { getUserID } from "../utils/auth";
+import { getSessionID, getUserID } from "../utils/auth";
 import { MediaService } from "./media.service";
 import { User } from "../user/user.schema";
 import { authenticatedOnly } from "../utils/express.middleware";
@@ -38,7 +38,12 @@ router.post(
       await s3Service.uploadBuffer(
         `profilePics/${userID}/profilePic.webp`,
         await img.toWebp(256, 256),
-        req.file.mimetype
+        req.file.mimetype,
+        {
+          "x-amz-meta-ip": req.ip,
+          "x-amz-meta-user-id": await getUserID(req),
+          "x-amz-meta-session-id": await getSessionID(req),
+        }
       );
 
       const pfpUrl = new URL(
@@ -93,7 +98,12 @@ router.post(
       await s3Service.uploadBuffer(
         `roomPics/${room.id}/roomPic.webp`,
         await img.toWebp(256, 256),
-        req.file.mimetype
+        req.file.mimetype,
+        {
+          "x-amz-meta-ip": req.ip,
+          "x-amz-meta-user-id": await getUserID(req),
+          "x-amz-meta-session-id": await getSessionID(req),
+        }
       );
 
       const roomPicUrl = new URL(
@@ -137,7 +147,12 @@ router.post(
         await s3Service.uploadBuffer(
           `uploads/${userID}/${fileName}`,
           file.buffer,
-          file.mimetype
+          file.mimetype,
+          {
+            "x-amz-meta-ip": req.ip,
+            "x-amz-meta-user-id": await getUserID(req),
+            "x-amz-meta-session-id": await getSessionID(req),
+          }
         );
 
         fileURLs.push(
