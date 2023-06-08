@@ -47,7 +47,7 @@ router.post(
       );
 
       const pfpUrl = new URL(
-        `https://s3.eu-central-2.wasabisys.com/cdn.pulse-messenger.com/profilePics/${userID}/profilePic.webp`
+        `https://${process.env.S3_BUCKET}/profilePics/${userID}/profilePic.webp`
       );
 
       user.profilePic = pfpUrl.toString();
@@ -107,7 +107,7 @@ router.post(
       );
 
       const roomPicUrl = new URL(
-        `https://s3.eu-central-2.wasabisys.com/cdn.pulse-messenger.com/roomPics/${room.id}/roomPic.webp`
+        `https://${process.env.S3_BUCKET}/roomPics/${room.id}/roomPic.webp`
       );
 
       room.profilePic = roomPicUrl.toString();
@@ -157,7 +157,7 @@ router.post(
 
         fileURLs.push(
           new URL(
-            `https://s3.eu-central-2.wasabisys.com/cdn.pulse-messenger.com/uploads/${userID}/${fileName}`
+            `https://${process.env.S3_BUCKET}/uploads/${userID}/${fileName}`
           ).toString()
         );
       }
